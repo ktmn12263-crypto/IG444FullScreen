@@ -5,6 +5,11 @@ static UIButton *igfs_button = nil;
 static BOOL igfs_enabled = NO;
 static UIView *igfs_targetView = nil;
 
+@interface IGFS_ButtonTarget : NSObject
++ (instancetype)shared;
+- (void)pressed:(UIButton *)sender;
+@end
+
 static BOOL IGFS_IsReelsLikeViewController(UIViewController *vc) {
     if (!vc) return NO;
 
@@ -167,11 +172,6 @@ static void IGFS_AddButtonIfNeeded(void) {
 
     [vc.view addSubview:igfs_button];
 }
-
-@interface IGFS_ButtonTarget : NSObject
-+ (instancetype)shared;
-- (void)pressed:(UIButton *)sender;
-@end
 
 @implementation IGFS_ButtonTarget
 + (instancetype)shared {
