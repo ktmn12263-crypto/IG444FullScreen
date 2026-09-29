@@ -5,17 +5,22 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Install Theos
         run: |
           brew install ldid make
           git clone --recursive https://github.com/theos/theos.git $HOME/theos
-          echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+          mkdir -p $HOME/theos/sdks
           curl -L https://github.com/theos/sdks/archive/master.tar.gz | tar xz -C $HOME/theos/sdks --strip-components=1
+          echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+
       - name: Build
-        run: gmake package FINALPACKAGE=1
+        run: gmake FINALPACKAGE=1
+
+      - name: Show output
+        run: find .theos -name "*.dylib"
+
       - uses: actions/upload-artifact@v4
         with:
           name: dylib
-          path: |
-            .theos/obj/*.dylib
-            packages/*
+          path: .theos/obj/*.dylib
